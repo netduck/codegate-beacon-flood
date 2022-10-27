@@ -4,6 +4,7 @@ import random
 from PySide6 import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
+from PySide6.QtCore import *
 
 
 # 접속 정보 설정
@@ -34,6 +35,7 @@ class MainWindow(QtWidgets.QWidget):
         self.button = QtWidgets.QPushButton('Click me!')
         self.text = QtWidgets.QLabel('Beacon Flooding',
                                     alignment=QtCore.Qt.AlignCenter)
+        self.text.setFont(QtGui.QFont("Press Start", 30, QtGui.QFont.Normal))
         self.requestTable = QTableWidget(0,2)
 
         # Query Layout Setting
@@ -63,7 +65,9 @@ class MainWindow(QtWidgets.QWidget):
 
         # Image Widget Setting
         self.label = QLabel(self, alignment=QtCore.Qt.AlignCenter)
+        self.label.resize(10000,10000)
         self.pixmap = QPixmap('../assets/img/logo.png')
+        self.pixmap.scaled(QSize(999,999), aspectMode=Qt.KeepAspectRatioByExpanding)
         self.label.setPixmap(self.pixmap)
         self.mainLayout.addWidget(self.label)
 
@@ -89,6 +93,10 @@ class MainWindow(QtWidgets.QWidget):
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 
+    #fontDB = QFontDatabase()
+    id = QFontDatabase.addApplicationFont('../assets/font/PrStart.ttf')
+    #print(QFontDatabase.applicationFontFamilies(id))
+    app.setFont(QtGui.QFont("Press Start", 15, QtGui.QFont.Normal))
     window = MainWindow()
     window.resize(800, 600)
     window.showFullScreen()
