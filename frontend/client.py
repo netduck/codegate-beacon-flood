@@ -6,26 +6,23 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 
-
-# 접속 정보 설정
-SERVER_IP = '127.0.0.1'
-SERVER_PORT = 1235
-SIZE = 1024
-SERVER_ADDR = (SERVER_IP, SERVER_PORT)
-'''
-# 클라이언트 소켓 설정
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
-    client_socket.connect(SERVER_ADDR)
-    while True:
-        ssid = input("Input SSID: ")
-        client_socket.send(ssid.encode())
-'''
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
         # Variable Setting
         self.elementCnt = 0
+
+        # 접속 정보 설정
+        self.SERVER_IP = '127.0.0.1'
+        self.SERVER_PORT = 1235
+        self.SIZE = 1024
+        self.SERVER_ADDR = (self.SERVER_IP, self.SERVER_PORT)
+
+        # Socket
+        # 클라이언트 소켓 설정
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.connect(self.SERVER_ADDR)    
 
         # Main Window Setting
         self.setWindowFlag(Qt.FramelessWindowHint)
@@ -105,17 +102,26 @@ class MainWindow(QtWidgets.QWidget):
 
         self.requestTable.insertRow(self.elementCnt)
         self.requestTable.setItem(self.elementCnt,0,QTableWidgetItem(str(self.elementCnt+1)))
-        self.requestTable.setItem(self.elementCnt,1,QTableWidgetItem(self.queryEdit.text()))
+        
+        queryStr = self.queryEdit.text()
+        self.requestTable.setItem(self.elementCnt,1,QTableWidgetItem(queryStr))
+        self.sock.send(queryStr.encode())
+        
         self.queryEdit.setText('')
         self.elementCnt+=1
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
 
+    
+
     #fontDB = QFontDatabase()
     id = QFontDatabase.addApplicationFont('../assets/font/PrStart.ttf')
     #print(QFontDatabase.applicationFontFamilies(id))
-    app.setFont(QtGui.QFont("Press Start", 28, QtGui.QFont.Normal))
+    app.setFont(QtGui.QFont("Press Start", 36, QtGui.QFont.Normal))
     window = MainWindow()
     window.showFullScreen()
+
+
+
     sys.exit(app.exec())
