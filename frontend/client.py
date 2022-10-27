@@ -23,30 +23,51 @@ class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
+        # Main Window Setting
         self.setWindowFlag(Qt.FramelessWindowHint)
         self.setStyleSheet("\
         color: white;\
         background-color: #232326;\
         ")
 
+        # Widget Generation
         self.button = QtWidgets.QPushButton('Click me!')
         self.text = QtWidgets.QLabel('Beacon Flooding',
                                     alignment=QtCore.Qt.AlignCenter)
+        self.requestTable = QTableWidget(0,2)
 
-        self.layout = QVBoxLayout()
-
+        # Query Layout Setting
         self.queryEdit = QLineEdit()
-        self.requestTable = QTableView()
         self.queryLayout = QHBoxLayout()
-        self.queryLayout.addWidget(self.queryEdit)
+        self.queryButton = QtWidgets.QPushButton('Submit')
         
+        self.queryLayout.addWidget(self.queryEdit)
+        self.queryLayout.addWidget(self.queryButton)
+        
+        # Table Widget Setting
+        self.requestTable.setStyleSheet("\
+        QHeaderView::section {background-color: #232326; width:100%}\
+        ")
+        self.requestTable.setHorizontalHeaderLabels(("No.","Wi-Fi Name"))
+        self.requestTable.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        self.requestTable.verticalHeader().hide()
+        self.requestTable.horizontalHeader().setStretchLastSection(True)
+        self.requestTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        
+        # Table Test Case
+        self.requestTable.insertRow(0)
+        self.requestTable.setItem(0,0,QTableWidgetItem("1"))
+        self.requestTable.setItem(0,1,QTableWidgetItem("TEST CASE"))
+
         self.mainLayout = QVBoxLayout()
 
+        # Image Widget Setting
         self.label = QLabel(self, alignment=QtCore.Qt.AlignCenter)
         self.pixmap = QPixmap('../assets/img/logo.png')
         self.label.setPixmap(self.pixmap)
         self.mainLayout.addWidget(self.label)
 
+        # Widgets -> MainWindow
         self.mainLayout.addWidget(self.text)
         self.mainLayout.addLayout(self.queryLayout)
         self.mainLayout.addWidget(self.requestTable)
@@ -58,10 +79,8 @@ class MainWindow(QtWidgets.QWidget):
 
         self.model = QStandardItemModel()
 
-
-        self.requestTable.setModel(self.model)
-        self.requestTable.verticalHeader().hide()
-        self.requestTable.horizontalHeader().setStretchLastSection(True)
+        #self.requestTable.setModel(self.model)
+        
 
     @QtCore.Slot()
     def callbackExample(self):
