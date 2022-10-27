@@ -56,8 +56,7 @@ def beacon_flood(dev, ssid, mac, start, given_time):
         if time.time() - start > float(given_time)*60:
             print(f"[!]SSID: {ssid} FINISHED")
             break
-        time.sleep(1)
-        sendp(frame, iface=dev, count = 4)
+        sendp(frame, iface=dev, count = 20)
 
 if __name__ == '__main__':
     dev = sys.argv[1]
