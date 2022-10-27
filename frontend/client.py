@@ -15,7 +15,7 @@ class MainWindow(QtWidgets.QWidget):
 
         # 접속 정보 설정
         self.SERVER_IP = '127.0.0.1'
-        self.SERVER_PORT = 1235
+        self.SERVER_PORT = 1235 
         self.SIZE = 1024
         self.SERVER_ADDR = (self.SERVER_IP, self.SERVER_PORT)
 
@@ -63,7 +63,7 @@ class MainWindow(QtWidgets.QWidget):
         self.requestTable.horizontalHeader().setStretchLastSection(True)
         self.requestTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         
-        # Table Test Case
+        #Table Test Case
         #for i in range(0,20):
         #    self.requestTable.insertRow(i)
         #    self.requestTable.setItem(i,0,QTableWidgetItem(str(i)))
@@ -74,7 +74,6 @@ class MainWindow(QtWidgets.QWidget):
         # Image Widget Setting
         self.label = QLabel(self, alignment=QtCore.Qt.AlignCenter)
         self.pixmap = QPixmap('../assets/img/logo.png')
-        #self.pixmap.scaled(500,500)
         self.label.setPixmap(self.pixmap)
         self.mainLayout.addWidget(self.label)
 
@@ -84,20 +83,13 @@ class MainWindow(QtWidgets.QWidget):
         self.mainLayout.addWidget(self.requestTable)
         
         self.setLayout(self.mainLayout)
-
-        #self.mainLayout.addWidget(self.button)
-        #self.button.clicked.connect(self.callbackExample)
-
-        #self.model = QStandardItemModel()
-        #self.requestTable.setModel(self.model)
         self.queryButton.clicked.connect(self.beaconRequest)
 
     @QtCore.Slot()
     def beaconRequest(self):
 
         if self.queryEdit.text()=="":
-            QMessageBox.warning(self, 'Warning', 'Empty',
-                                    QMessageBox.Yes)
+            QMessageBox.warning(self, 'Warning', 'Empty',QMessageBox.Yes)
             return
 
         self.requestTable.insertRow(self.elementCnt)
@@ -110,18 +102,17 @@ class MainWindow(QtWidgets.QWidget):
         self.queryEdit.setText('')
         self.elementCnt+=1
 
-if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
-
-    
-
-    #fontDB = QFontDatabase()
+def SetFont(app):
+    #Font Setting
     id = QFontDatabase.addApplicationFont('../assets/font/PrStart.ttf')
     #print(QFontDatabase.applicationFontFamilies(id))
     app.setFont(QtGui.QFont("Press Start", 36, QtGui.QFont.Normal))
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication([])
+
+    SetFont(app)
     window = MainWindow()
     window.showFullScreen()
-
-
 
     sys.exit(app.exec())
