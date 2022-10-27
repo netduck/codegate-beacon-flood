@@ -12,6 +12,8 @@ MAC_LIST = []
 HOST = '127.0.0.1'
 PORT = 1235
 
+event = threading.Event()
+
 def server_socket():
     server_sock = socket(AF_INET, SOCK_STREAM)
     server_sock.bind((HOST, PORT))
@@ -26,6 +28,7 @@ def server_socket():
 
             if not ssid:
                 print('[*] Socket is closed')
+                event.set()
                 exit(1)
 
             while True:
@@ -61,6 +64,9 @@ def beacon_flood(dev, ssid, mac, start, given_time):
         if time.time() - start > float(given_time)*60:
             print(f"[!]SSID: {ssid} FINISHED")
             break
+        if event.is_set():
+            print('[*] Thread is finished')
+            return
         sendp(frame, iface=dev, count = 20)
 
 if __name__ == '__main__':
