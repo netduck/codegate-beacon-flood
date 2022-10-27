@@ -23,6 +23,11 @@ def server_socket():
         while True:
             print("[*] Waiting for SSID")
             ssid = client_sock.recv(1024)
+
+            if not ssid:
+                print('[*] Socket is closed')
+                exit(1)
+
             while True:
                 mac = random.randrange(100000000000,100000000000000000)
                 if mac in MAC_LIST:
