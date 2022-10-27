@@ -48,7 +48,7 @@ class MainWindow(QtWidgets.QWidget):
         
         # Table Widget Setting
         self.requestTable.setStyleSheet("\
-        QHeaderView::section {background-color: #232326; width:100%}\
+        QHeaderView::section {background-color: #232326; width:100%;}\
         ")
         self.requestTable.setHorizontalHeaderLabels(("No.","Wi-Fi Name"))
         self.requestTable.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
@@ -57,9 +57,10 @@ class MainWindow(QtWidgets.QWidget):
         self.requestTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         
         # Table Test Case
-        self.requestTable.insertRow(0)
-        self.requestTable.setItem(0,0,QTableWidgetItem("1"))
-        self.requestTable.setItem(0,1,QTableWidgetItem("TEST CASE"))
+        for i in range(0,20):
+            self.requestTable.insertRow(i)
+            self.requestTable.setItem(i,0,QTableWidgetItem(str(i)))
+            self.requestTable.setItem(i,1,QTableWidgetItem("TEST CASE"))
 
         self.mainLayout = QVBoxLayout()
 
@@ -96,8 +97,7 @@ if __name__ == "__main__":
     #fontDB = QFontDatabase()
     id = QFontDatabase.addApplicationFont('../assets/font/PrStart.ttf')
     #print(QFontDatabase.applicationFontFamilies(id))
-    app.setFont(QtGui.QFont("Press Start", 15, QtGui.QFont.Normal))
+    app.setFont(QtGui.QFont("Press Start", 28, QtGui.QFont.Normal))
     window = MainWindow()
-    window.resize(800, 600)
     window.showFullScreen()
     sys.exit(app.exec())
