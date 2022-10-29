@@ -98,6 +98,7 @@ void sendBeacon(u_char* Interface){
     radio_init(&radioTap);
     struct beaconPacket BP;
     BP.radio = radioTap;
+
     BP.beacon.FcF = 0x0080;
     BP.beacon.Dur = 0x0000;
     randMac(BP.beacon.mac_des);
