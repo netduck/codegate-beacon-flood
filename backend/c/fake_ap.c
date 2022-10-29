@@ -110,28 +110,21 @@ void sendBeacon(u_char* Interface){
     // printf("%p\n",tag);
     u_char buf[256] = {0,};
     int len;
+    u_char *n[MAX_SIZE] = {"test0","test1","test2","test3","test4","test5","test6","test7","test8","test9"};
     for(int i=0;i<MAX_SIZE;i++){
-        u_char n[] = "testX\0";
         tag[i].tag_number = 0x00;
         tag[i].ssid_len = 0x00;
-        n[4] = i+'0';
-        tag[i].ssid_name = n;
+        tag[i].ssid_name = n[i];
 
     }
     char errbuf[PCAP_ERRBUF_SIZE];
     pcap_t *pcap = pcap_open_live(Interface, BUFSIZ, 1, 1000, errbuf);
     while(1){
-        if(cnt > MAX_SIZE){
+        if(cnt > MAX_SIZE-1){
             cnt = 0;
         }
         BP.tag = tag[cnt++];
-        
-        //printf("%s",tag[0].ssid_name);
-        //printf("%s",tag[1].ssid_name);
-        //printf("%d\n",sizeof(BP));
-        //printf("%s\n",BP.tag.ssid_name);
-        //printf("%s\n",tag[0].ssid_name);
-	//pcap_sendpacket(pcap, (char *)&BP, sizeof(BP) - 2);
+        printf("%s\n",BP.tag.ssid_name);
     }
 }
 int main(int argc, char argv[]){
