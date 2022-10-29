@@ -88,18 +88,6 @@ void randMac(u_char mac_addr[6]){
 }
 
 void tagInit(struct ssid_tag tag[9]){
-    u_char buf[256];
-    int len;
-    printf("%p\n",&tag[1]);
-    for(int i=0;i<MAX_SIZE;i++){
-        tag[i].tag_number = 0x00;
-        tag[i].ssid_len = 0x00;
-        len = sprintf(buf,"test");
-        len += sprintf(buf+len,"%d",i);
-        tag[i].ssid_name = buf;
-        // strcat(tag[i].ssid_name,"test");
-        // strcat(tag[i].ssid_name,itoa(i,buf,10));
-    }
 }
 // void socket();
 
@@ -116,10 +104,20 @@ void sendBeacon(u_char* Interface){
     Mac_("ff:ff:ff:ff:ff:ff", BP.beacon.mac_src);
     randMac(BP.beacon.mac_bssid);
     BP.beacon.FSnumber = 0x0000;
-    printf("%p\n",&tag[1]);
-    tagInit(tag);
+    // printf("%p\n",&tag[1]);
+    // tagInit(tag);
     // printf("%s",tag[0].ssid_name);
     // printf("%p\n",tag);
+    u_char buf[256] = {0,};
+    int len;
+    for(int i=0;i<MAX_SIZE;i++){
+        u_char n[] = "testX\0";
+        tag[i].tag_number = 0x00;
+        tag[i].ssid_len = 0x00;
+        n[4] = i+'0';
+        tag[i].ssid_name = n;
+
+    }
     char errbuf[PCAP_ERRBUF_SIZE];
     pcap_t *pcap = pcap_open_live(Interface, BUFSIZ, 1, 1000, errbuf);
     while(1){
@@ -128,6 +126,8 @@ void sendBeacon(u_char* Interface){
         }
         BP.tag = tag[cnt++];
         
+        // printf("%s",tag[0].ssid_name);
+        // printf("%s",tag[1].ssid_name);
         // printf("%d\n",sizeof(BP));
         // printf("%s\n",BP.tag.ssid_name);
         // printf("%s\n",tag[0].ssid_name);
