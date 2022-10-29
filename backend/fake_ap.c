@@ -114,7 +114,9 @@ void sandBeacon(){
     randMac(BP.beacon.mac_bssid);
     BP.beacon.FSnumber = 0x0000;
     tagInit(tag);
-    while(1);
+    while(1){
+        
+    }
 }
 int main(int argc, char argv[]){
     unsigned char Interface = argv[1];
