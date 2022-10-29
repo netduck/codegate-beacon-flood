@@ -48,12 +48,13 @@ class QueryLayout(QHBoxLayout):
         super().addWidget(self.queryButton)
 
         self.queryButton.clicked.connect(self.beaconRequest)
+        self.queryEdit.returnPressed.connect(self.beaconRequest)
 
     @QtCore.Slot()
     def beaconRequest(self):
 
         if self.queryEdit.text()=="":
-            QMessageBox.warning(self, 'Warning', 'Empty',QMessageBox.Yes)
+            warn('Empty')
             return
 
         self.reqTbl.insertRow(self.elementCnt)
@@ -108,6 +109,10 @@ class MainWindow(QtWidgets.QWidget):
         self.mainLayout.addWidget(self.requestTable)
         
         self.setLayout(self.mainLayout)
+
+def warn(warnStr):
+    msgBox = QMessageBox()
+    msgBox.warning(window, 'Warning', warnStr, QMessageBox.Yes)
 
 def SetFont(app):
     #Font Setting
