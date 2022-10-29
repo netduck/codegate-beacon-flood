@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define MAX_SIZE 10
+
 struct Radio
 {
     uint8_t version; /* set to 0 */
@@ -88,7 +90,8 @@ void randMac(u_char mac_addr[6]){
 void tagInit(struct ssid_tag tag[9]){
     u_char buf[256];
     int len;
-    for(int i=0;i<10;i++){
+    printf("%p\n",&tag[1]);
+    for(int i=0;i<MAX_SIZE;i++){
         tag[i].tag_number = 0x00;
         tag[i].ssid_len = 0x00;
         len = sprintf(buf,"test");
@@ -98,9 +101,9 @@ void tagInit(struct ssid_tag tag[9]){
         // strcat(tag[i].ssid_name,itoa(i,buf,10));
     }
 }
-void socket();
+// void socket();
 
-void sandBeacon(){
+void sendBeacon(u_char* Interface){
     int cnt=0;
     struct Radio radioTap;
     struct ssid_tag tag[9];
@@ -113,12 +116,25 @@ void sandBeacon(){
     Mac_("ff:ff:ff:ff:ff:ff", BP.beacon.mac_src);
     randMac(BP.beacon.mac_bssid);
     BP.beacon.FSnumber = 0x0000;
+    printf("%p\n",&tag[1]);
     tagInit(tag);
+    // printf("%s",tag[0].ssid_name);
+    // printf("%p\n",tag);
+    char errbuf[PCAP_ERRBUF_SIZE];
+    pcap_t *pcap = pcap_open_live(Interface, BUFSIZ, 1, 1000, errbuf);
     while(1){
+        if(cnt > MAX_SIZE){
+            cnt = 0;
+        }
+        BP.tag = tag[cnt++];
         
+        // printf("%d\n",sizeof(BP));
+        // printf("%s\n",BP.tag.ssid_name);
+        // printf("%s\n",tag[0].ssid_name);
+        // pcap_sendpacket(pcap, (char *)&BP, sizeof(BP) - 2);
     }
 }
 int main(int argc, char argv[]){
     unsigned char Interface = argv[1];
-    sandBeacon();
+    sendBeacon(&Interface);
 }
