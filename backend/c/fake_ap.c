@@ -7,128 +7,137 @@
 
 #define MAX_SIZE 10
 
-struct Radio
-{
-    uint8_t version; /* set to 0 */
-    uint8_t pad;
-    uint16_t len;     /* entire length */
-    uint32_t present; /* fields present */
-};
+#define MAC_ADDR_LEN	6
+#define SSID_LEN	32
+#define SSID_TAG_NUM	0
 
-void radio_init(struct Radio *rad)
+struct RadioTap
 {
-    rad->version = 0x00;
-    rad->pad = 0x00;
-    rad->len = 0x0008;
-    rad->present = 0x00;
-}
+	uint8_t			version;
+	uint8_t			pad;
+	uint16_t		len;
+	uint32_t		present;
+} __attribute__((packed));
+
+struct Dot11
+{
+	uint16_t		type;
+	uint16_t		duration;
+	u_char 			dest[MAC_ADDR_LEN];
+	u_char 			src[MAC_ADDR_LEN];
+	u_char			bssid[MAC_ADDR_LEN];
+	uint16_t		fsNum;
+} __attribute__((packed));
+
+struct Dot11Management
+{
+	uint64_t 		timestamp;
+	uint16_t 		interval;
+	uint16_t		cap;
+} __attribute__((packed));
+
+struct SSIDElement
+{
+	u_char			tag_number;
+	u_char			ssid_len;
+	u_char			ssid_name[SSID_LEN];
+} __attribute__((packed));
+
 
 struct BeaconFrame
 {
-    uint16_t FcF;
-    uint16_t Dur;                  // Duration
-    u_char mac_des[6];   // Destination address
-    u_char mac_src[6];   // Source address
-    u_char mac_bssid[6]; // BSS Id
-    uint16_t FSnumber;
-};
-struct ssid_tag
+	struct RadioTap 	rt;
+	struct Dot11		dot11;
+	struct Dot11Management	dot11man;
+	struct SSIDElement	ssid;
+} __attribute__((packed));
+
+void mac(u_char *mac_addr, const char *arr)
 {
-    u_char tag_number;
-    u_char ssid_len;
-    u_char *ssid_name;
-};
+	int a;
+	char cpyarr[18];
 
-struct beaconPacket{
-    struct Radio radio;
-    struct BeaconFrame beacon;
-    struct ssid_tag tag;
-};
+	if (strlen(arr) != 17)
+	{
+		printf("Maclen error!!\n");
+	}
 
-void Mac_(const char *arr, u_char mac_addr[6])
+	memcpy(cpyarr, arr, 17);
+	
+	for (int i = 0; i < 6; i++) //입력Mac값의 콜론 제거
+	{
+		cpyarr[i * 3 + 2] = '\0';
+		sscanf((const char *)&cpyarr[3 * i], "%x", &a);
+		mac_addr[i] = (u_char)a;
+	}
+}
+
+void randMac(u_char *mac_addr)
 {
-    int a;
-    if (strlen(arr) != 17)
-    {
-        printf("Maclen error!!\n");
-    }
-    char cpyarr[18];
-    memcpy(cpyarr, arr, 17);
-    for (int i = 0; i < 6; i++) //입력Mac값의 콜론 제거
-    {
-        cpyarr[i * 3 + 2] = '\0';
-        sscanf((const char *)&cpyarr[3 * i], "%x", &a);
-        mac_addr[i] = (u_char)a;
-    }
+	for(int i=0;i<6;i++)
+	{
+		srand((unsigned)time(NULL));
+		mac_addr[i] = rand()%256;
+	}
 }
 
-// void returnRMAC(){
-//     char mac[15];
-//     int a,b;
-//     for(int i=0; i < 6; i++){
-//         srand((unsigned)time(NULL));
-//         a = rand()%16;
-//         srand((unsigned)time(NULL));
-//         b = rand()%16;
-//         printf("%c\n\n",a);
-//         mac[3*i] = (char)a;
-//         mac[3*i+1] = (char)b;
-//         mac[3*i+2] = ':';
-//         // *(mac+3*i+1) = (char)b;
-//         // *(mac+3*i+2) = *":";
-//     }
-//     mac[15] = '\0';
-//     printf("%s",mac);
-// }[
-void randMac(u_char mac_addr[6]){
-    for(int i=0;i<6;i++){
-        srand((unsigned)time(NULL));
-        mac_addr[i] = rand()%256;
-    }
+void setSSID(struct BeaconFrame *bc, const char *ssid)
+{
+	bc->ssid.tag_number = SSID_TAG_NUM;
+	bc->ssid.ssid_len = strlen(ssid);
+	memcpy(bc->ssid.ssid_name, ssid, bc->ssid.ssid_len);
 }
 
-void tagInit(struct ssid_tag tag[9]){
+void initBeacon(struct BeaconFrame *bc, const char *ssid)
+{
+	memset(bc, 0, sizeof(struct BeaconFrame));
+	
+	/* RadioTap */
+	bc->rt.len = 0x8;
+
+	/* Dot11 */
+	bc->dot11.type = 0x80;
+	mac(bc->dot11.dest, "ff:ff:ff:ff:ff:ff");
+	randMac(bc->dot11.src);
+	memcpy(bc->dot11.bssid, bc->dot11.src, 6);
+
+	/* Dot11Management */
+	bc->dot11man.interval = 0x64;
+	bc->dot11man.cap = 0x11;
+
+	/* SSID Element */
+	setSSID(bc, ssid);
 }
-// void socket();
 
-void sendBeacon(u_char* Interface){
-    int cnt=0;
-    struct Radio radioTap;
-    struct ssid_tag tag[9];
-    radio_init(&radioTap);
-    struct beaconPacket BP;
-    BP.radio = radioTap;
 
-    BP.beacon.FcF = 0x0080;
-    BP.beacon.Dur = 0x0000;
-    randMac(BP.beacon.mac_des);
-    Mac_("ff:ff:ff:ff:ff:ff", BP.beacon.mac_src);
-    randMac(BP.beacon.mac_bssid);
-    BP.beacon.FSnumber = 0x0000;
-    // printf("%p\n",&tag[1]);
-    // tagInit(tag);
-    // printf("%s",tag[0].ssid_name);
-    // printf("%p\n",tag);
-    u_char buf[256] = {0,};
-    int len;
-    u_char *n[MAX_SIZE] = {"test0","test1","test2","test3","test4","test5","test6","test7","test8","test9"};
-    for(int i=0;i<MAX_SIZE;i++){
-        tag[i].tag_number = 0x00;
-        tag[i].ssid_len = 0x00;
-        tag[i].ssid_name = n[i];
+void sendBeacon(u_char* Interface)
+{
+	char errbuf[PCAP_ERRBUF_SIZE];
+	struct BeaconFrame bc;
 
-    }
-    char errbuf[PCAP_ERRBUF_SIZE];
-    pcap_t *pcap = pcap_open_live(Interface, BUFSIZ, 1, 1000, errbuf);
-    while(1){
-        if(cnt > MAX_SIZE-1){
-            cnt = 0;
-        }
-        BP.tag = tag[cnt++];
-        printf("%s\n",BP.tag.ssid_name);
-    }
+	initBeacon(&bc, "saddsafsadfdsafdsaf");
+
+	pcap_t *pcap = pcap_open_live(Interface, BUFSIZ, 1, 1000, errbuf);
+	
+	if(pcap == NULL)
+	{
+	    fprintf(stderr, "pcap_open_live Error\n");
+	    exit(-1);
+	}
+
+	while(1)
+	{		
+	    for(int i=0; i<20; i++)
+	    {
+		    if(pcap_sendpacket(pcap, (char*)&bc, sizeof(struct BeaconFrame)-SSID_LEN+bc.ssid.ssid_len)!=0)
+		    {
+			    fprintf(stderr, "Error\n");
+			    exit(-1);
+		    }
+	    }
+	}
 }
-int main(int argc, char argv[]){
-    unsigned char Interface = argv[1];
-    sendBeacon(&Interface);
+int main(int argc, char *argv[]){
+    unsigned char *Interface = argv[1];
+    sendBeacon(Interface);
 }
