@@ -118,10 +118,9 @@ void sendBeacon(u_char* Interface)
 	initBeacon(&bc, "saddsafsadfdsafdsaf");
 
 	pcap_t *pcap = pcap_open_live(Interface, BUFSIZ, 1, 1000, errbuf);
-	
 	if(pcap == NULL)
 	{
-	    fprintf(stderr, "pcap_open_live Error\n");
+	    fprintf(stderr, "pcap_open_live Error : %s\n",errbuf);
 	    exit(-1);
 	}
 
