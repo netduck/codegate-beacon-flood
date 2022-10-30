@@ -9,10 +9,10 @@
 #include <pthread.h>
 
 #include <iostream>
-#include <queue>
+#include <deque>
 
 #include "request.h"
-queue<char*> request_queue;
+deque<char*> request_queue;
 
 int sock_init(void)
 {
@@ -77,12 +77,12 @@ void read_ssid_from_client(void)
                 if(request_queue.size()==QUEUE_SIZE)
                 {
                         char* expired = request_queue.front();
-                        request_queue.pop();
+                        request_queue.pop_front();
                         cout<<"Delete : "<<expired<<endl;
                         free(expired);
                 }
 
-                request_queue.push(request);
+                request_queue.push_back(request);
         }
 }
 

@@ -27,17 +27,19 @@ void mac(u_char *mac_addr, const char *arr)
 
 void randMac(u_char *mac_addr)
 {
-        for(int i=0;i<6;i++)
-        {
-                srand((unsigned)time(NULL));
-                mac_addr[i] = rand()%256;
-        }
+	mac_addr[0] = 0x12;
+	mac_addr[1] = 0x23;
+	mac_addr[2] = 0x34;
+	mac_addr[3] = 0x45;
+	mac_addr[4] = 0x56;
+	mac_addr[5] = rand()%100;
 }
 
 void setSSID(struct BeaconFrame *bc, const char *ssid)
 {
         bc->ssid.tag_number = SSID_TAG_NUM;
         bc->ssid.ssid_len = strlen(ssid);
+	memset(bc->ssid.ssid_name, 0, SSID_LEN);
         memcpy(bc->ssid.ssid_name, ssid, bc->ssid.ssid_len);
 }
 
