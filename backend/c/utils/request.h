@@ -1,4 +1,5 @@
 #pragma once
+#include <queue>
 #define PORT            1235
 #define LOCAL_HOST      "127.0.0.1"
 #define SSID_LEN        32
