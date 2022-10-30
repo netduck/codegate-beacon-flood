@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "beacon.h"
+#include "utils/beacon.h"
 
 #define MAX_SIZE 10
 
