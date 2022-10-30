@@ -84,17 +84,33 @@ void read_ssid_from_client(void)
 		{
 			char* expired = request_queue.front();
 			request_queue.pop();
-			//cout<<"Delete : "<<expired<<endl;
+			cout<<"Delete : "<<expired<<endl;
 			free(expired);
 		}
 
 		request_queue.push(request);
 	}
+
+}
+
+void* threader(void *arg)
+{
+	read_ssid_from_client();
+	return NULL;
 }
 
 
 int main(void)
 {
-	
+	pthread_t thread_t;
+	void** ret;
+	if(pthread_create(&thread_t, NULL, threader, NULL) < 0)
+	{
+		perror("Thread Fail");
+		exit(-1);
+	}
+
+	pthread_join(thread_t, ret);
+
 	return 0;
 }
