@@ -10,7 +10,7 @@ import sockcom
 
 class RequestTable(QTableWidget):
     def __init__(self):
-        super().__init__(0,2)
+        super().__init__(10,2)
         super().setStyleSheet("\
             QHeaderView::section { background-color: #232326; width:100%;}\
             QHeaderView::section:hover { background-color: #FF0C00; width:100%;}\
@@ -30,7 +30,7 @@ class QueryLayout(QHBoxLayout):
         super().__init__()
 
         # Variable Setting
-        self.elementCnt = 0
+        self.elementIdx = 0
         self.reqTbl =  reqTbl
         
         # Socket
@@ -57,16 +57,20 @@ class QueryLayout(QHBoxLayout):
             warn('Empty')
             return
 
-        self.reqTbl.insertRow(self.elementCnt)
-        self.reqTbl.setItem(self.elementCnt,0,QTableWidgetItem(str(self.elementCnt+1)))
+        #self.reqTbl.insertRow(self.elementIdx)
+        self.reqTbl.setItem(self.elementIdx,0,QTableWidgetItem(str(self.elementIdx+1)))
         
         queryStr = self.queryEdit.text()
-        self.reqTbl.setItem(self.elementCnt,1,QTableWidgetItem(queryStr))
+        self.reqTbl.setItem(self.elementIdx,1,QTableWidgetItem(queryStr))
         #self.sock.send(queryStr.encode())
         self.conn.sock.send(queryStr.encode())
 
         self.queryEdit.setText('')
-        self.elementCnt+=1
+        
+        if self.elementIdx<9:
+            self.elementIdx+=1
+        else:
+            self.elementIdx=0
 
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
