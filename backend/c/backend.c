@@ -38,10 +38,12 @@ void startServer(void)
 }
 
 
-int main(int argc, char *argv[]){
-    //unsigned char *Interface = argv[1];
-    //sendBeacon(Interface);
-    startServer();
+int main(int argc, char *argv[])
+{
+	setvbuf(stdout, 0, 2, 0);
+	//unsigned char *Interface = argv[1];
+	//sendBeacon(Interface);
+	startServer();
 
-    return 0;
+	return 0;
 }

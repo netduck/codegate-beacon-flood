@@ -74,6 +74,13 @@ void read_ssid_from_client(void)
                 request = (char*)calloc(SSID_LEN, sizeof(char));
                 read(client_sock, request, SSID_LEN);
 
+		if(strlen(request) == 0)
+		{
+			fprintf(stderr, "read_ssid_from_client() : Connection closed\n");
+			close(client_sock);
+			exit(-1);
+		}
+
                 if(request_queue.size()==QUEUE_SIZE)
                 {
                         char* expired = request_queue.front();
@@ -85,27 +92,3 @@ void read_ssid_from_client(void)
                 request_queue.push_back(request);
         }
 }
-
-/*
-	void* threader(void *arg)
-	{
-		read_ssid_from_client();
-		return NULL;
-	}
-
-
-	int main(void)
-	{
-		pthread_t thread_t;
-		void** ret;
-		if(pthread_create(&thread_t, NULL, threader, NULL) < 0)
-		{
-			perror("Thread Fail");
-			exit(-1);
-		}
-
-		pthread_join(thread_t, ret);
-
-		return 0;
-	}
-*/

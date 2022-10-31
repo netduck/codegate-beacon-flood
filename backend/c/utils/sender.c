@@ -21,18 +21,6 @@ void send_beacon(const char* iface)
 		exit(-1);
 	}
 
-	/*	Test Case
-		request_queue.push_back("1");
-		request_queue.push_back("2");
-		request_queue.push_back("3");
-		request_queue.push_back("4");
-		request_queue.push_back("5");
-		request_queue.push_back("6");
-		request_queue.push_back("7");
-		request_queue.push_back("8");
-		request_queue.push_back("9");
-		request_queue.push_back("10");
-	*/
 	while(1)
 	{
 		if(!request_queue.empty())
@@ -42,7 +30,6 @@ void send_beacon(const char* iface)
 				//randMac(bc.dot11.src); 
 				//setSSID(&bc, request_queue[i]); 
 				initBeacon(&bc, request_queue[i]);
-				printf("%s output!!!\n", request_queue[i]);
 				for(int j=0; j<20; j++)
 				{
 					if(pcap_sendpacket(pcap, (const u_char*)&bc, calcBeaconSize(&bc))!=0)
