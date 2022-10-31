@@ -17,7 +17,7 @@ void* sender(void *iface)
 	return NULL;
 }
 
-void startServer(void)
+void startServer(const char* iface)
 {
 	pthread_t connThread, sendThread;
 	void** ret;
@@ -28,7 +28,7 @@ void startServer(void)
 		exit(-1);
 	}
 
-	if(pthread_create(&sendThread, NULL, sender, (void*)"mon0") <0)
+	if(pthread_create(&sendThread, NULL, sender, (void*)iface) <0)
 	{
 		perror("sendThread Fail");
 		exit(-1);
@@ -41,9 +41,13 @@ void startServer(void)
 int main(int argc, char *argv[])
 {
 	setvbuf(stdout, 0, 2, 0);
-	//unsigned char *Interface = argv[1];
-	//sendBeacon(Interface);
-	startServer();
 
+	if(argc!=2)
+	{
+		fprintf(stderr, "usage : ./backend <iface>\n");
+		exit(-1);
+	}
+
+	startServer(argv[1]);
 	return 0;
 }
