@@ -11,5 +11,9 @@
   
   일시 : 11월 8일(화) 10:00~17:00<br/>
   장소 : 코엑스, 그랜드볼룸 로비<br/><br/>
-  <img src="https://user-images.githubusercontent.com/75542499/198826003-d16ce15a-cc0a-4e2e-a51d-81d5d5b04762.png" width="80%"/>
+  <img src="https://user-images.githubusercontent.com/75542499/199103456-a2a298b7-7c13-4480-a194-ab325dfebe0c.png" width="80%"/>
+  <br/><br/>
+  
+  
+
 </div>
