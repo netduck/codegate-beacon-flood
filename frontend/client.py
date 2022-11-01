@@ -66,6 +66,7 @@ class QueryLayout(QHBoxLayout):
         self.conn.sock.send(queryStr.encode())
 
         self.queryEdit.setText('')
+        self.queryEdit.setFocus()
         
         if self.elementIdx<9:
             self.elementIdx+=1
