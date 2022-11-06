@@ -88,6 +88,16 @@ class MainWindow(QtWidgets.QWidget):
         self.text.setStyleSheet("padding :30px")
         self.text.setFont(QtGui.QFont("Press Start", 30, QtGui.QFont.Normal))
 
+        # Warn label
+        self.warnLabel = QtWidgets.QLabel('[!] 심한 욕설이 포함된 문구 또는 남을 비방하는 문구는 쓰지마세요.', alignment=QtCore.Qt.AlignCenter)
+        self.warnLabel.setStyleSheet("padding :30px")
+        self.warnLabel.setFont(QtGui.QFont("Press Start", 30, QtGui.QFont.Normal))
+
+        # Example label
+        self.exLabel = QtWidgets.QLabel('Example> 2022 코드게이트!', alignment=QtCore.Qt.AlignCenter)
+        self.exLabel.setStyleSheet("padding :30px")
+        self.exLabel.setFont(QtGui.QFont("Press Start", 20, QtGui.QFont.Normal))
+
         # Query Layout Setting
         # Request Table Setting
         self.requestTable = RequestTable()
@@ -109,8 +119,10 @@ class MainWindow(QtWidgets.QWidget):
 
         # Widgets -> MainWindow
         self.mainLayout.addWidget(self.text)
+        self.mainLayout.addWidget(self.exLabel)
         self.mainLayout.addLayout(self.queryLayout)
         self.mainLayout.addWidget(self.requestTable)
+        self.mainLayout.addWidget(self.warnLabel)
         
         self.setLayout(self.mainLayout)
 
