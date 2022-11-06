@@ -78,7 +78,6 @@ class MainWindow(QtWidgets.QWidget):
         super().__init__()
 
         # Main Window Setting
-        self.setWindowFlag(Qt.FramelessWindowHint)
         self.setStyleSheet("\
         color: white;\
         background-color: #232326;\
@@ -114,6 +113,11 @@ class MainWindow(QtWidgets.QWidget):
         self.mainLayout.addWidget(self.requestTable)
         
         self.setLayout(self.mainLayout)
+
+    def keyPressEvent(self, e):
+        if e.key() == 16777265: # F2
+            self.showFullScreen()
+            self.resize(800, 800)
 
 def warn(warnStr):
     msgBox = QMessageBox()
