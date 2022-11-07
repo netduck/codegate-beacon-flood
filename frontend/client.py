@@ -64,6 +64,9 @@ class QueryLayout(QHBoxLayout):
         queryStr = self.queryEdit.text()
         self.reqTbl.setItem(self.elementIdx,1,QTableWidgetItem(queryStr))
         #self.sock.send(queryStr.encode())
+
+        # Edit Query String
+        queryStr = str(self.elementIdx)+'.'+queryStr[:30]
         self.conn.sock.send(queryStr.encode())
 
         self.queryEdit.setText('')
