@@ -1,6 +1,7 @@
 #include <pcap.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "beacon.h"
 #include "request.h"
@@ -37,8 +38,9 @@ void send_beacon(const char* iface)
 						fprintf(stderr, "send_beacon : Error\n");
 						exit(-1);
 					}
+					usleep(SEND_INTERVAL);
 				}
-
+				usleep(REQUEST_INTERVAL);
 			}
 		}
 	}
