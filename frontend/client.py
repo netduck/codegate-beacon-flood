@@ -39,7 +39,7 @@ class QueryLayout(QHBoxLayout):
         # Editor
         self.queryEdit = QLineEdit()
         self.queryEdit.setStyleSheet('padding :30px')
-        self.queryEdit.setMaxLength(32)
+        self.queryEdit.setMaxLength(12)
 
         # Button
         self.queryButton = QPushButton('Submit')
@@ -66,7 +66,7 @@ class QueryLayout(QHBoxLayout):
         #self.sock.send(queryStr.encode())
 
         # Edit Query String
-        queryStr = str(self.elementIdx)+'.'+queryStr[:30]
+        queryStr = str(self.elementIdx)+'.'+queryStr[:12]
         self.conn.sock.send(queryStr.encode())
 
         self.queryEdit.setText('')
