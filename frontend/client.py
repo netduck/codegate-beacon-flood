@@ -39,6 +39,7 @@ class QueryLayout(QHBoxLayout):
         # Editor
         self.queryEdit = QLineEdit()
         self.queryEdit.setStyleSheet('padding :30px')
+        self.queryEdit.setMaxLength(32)
 
         # Button
         self.queryButton = QPushButton('Submit')
