@@ -66,7 +66,7 @@ class QueryLayout(QHBoxLayout):
         #self.sock.send(queryStr.encode())
 
         # Edit Query String
-        queryStr = str(self.elementIdx)+'.'+queryStr[:10]
+        queryStr = str(self.elementIdx+1)+'.'+queryStr[:10]
         self.conn.sock.send(queryStr.encode())
 
         self.queryEdit.setText('')
