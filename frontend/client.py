@@ -38,12 +38,12 @@ class QueryLayout(QHBoxLayout):
 
         # Editor
         self.queryEdit = QLineEdit()
-        self.queryEdit.setStyleSheet('padding :30px')
+        self.queryEdit.setStyleSheet('padding :12px')
         self.queryEdit.setMaxLength(12)
 
         # Button
         self.queryButton = QPushButton('Submit')
-        self.queryButton.setStyleSheet("border :1px solid #FFFFFF;padding :30px")
+        self.queryButton.setStyleSheet("border :1px solid #FFFFFF;padding :12px")
 
         super().addWidget(self.queryEdit)
         super().addWidget(self.queryButton)
@@ -89,12 +89,12 @@ class MainWindow(QtWidgets.QWidget):
 
         # Widget Generation
         self.text = QtWidgets.QLabel('Beacon Flooding', alignment=QtCore.Qt.AlignCenter)
-        self.text.setStyleSheet("padding :30px")
+        self.text.setStyleSheet("padding :20px")
         self.text.setFont(QtGui.QFont("Press Start", 30, QtGui.QFont.Normal))
 
         # Warn label
         self.warnLabel = QtWidgets.QLabel('[!] 심한 욕설이 포함된 문구 또는 남을 비방하는 문구는 쓰지마세요.', alignment=QtCore.Qt.AlignCenter)
-        self.warnLabel.setStyleSheet("padding :30px")
+        self.warnLabel.setStyleSheet("padding :20px")
         self.warnLabel.setFont(QtGui.QFont("Press Start", 30, QtGui.QFont.Normal))
 
         # Example label
